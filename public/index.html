@@ -1,0 +1,36 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html>
+
+<body>
+    <h1>Live Messages</h1>
+    <input id="msg" placeholder="Type a message" />
+    <p id="typing"></p>
+    <ul id="messages"></ul>
+    <script>
+        const socket = new WebSocket(location.origin.replace("http", "ws"));
+        socket.onmessage = (event) => {
+            const li = document.createElement("li");
+            li.textContent = event.data;
+            messages.appendChild(li);
+        };
+        msg.addEventListener("keydown", e => {
+            if (e.key === "Enter") {
+                socket.send(msg.value);
+                msg.value = "";
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            console.log("Key pressed:", event.key);
+            document.getElementById("typing").innerHTML = "Typing...";
+        });
+
+        document.addEventListener("keyup", function (event) {
+            console.log("Key pressed:", event.key);
+            document.getElementById("typing").innerHTML = "";
+        });
+    </script>
+</body>
+
+</html>
